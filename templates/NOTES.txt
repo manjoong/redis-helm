@@ -1,1 +1,4 @@
 1. Get the application URL by running these commands:
+2. Type the command to create the cluster.
+3. Check your Cluster
+(ref: https://github.com/manjoong/redis-helm)

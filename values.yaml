@@ -13,8 +13,21 @@ redisService:
 exporterService:
   port: 16379
 
-storageClassName:
-  name: "nfs-client"
+storageClassName: "nfs-client"
+
+## Redis pod Security Context
+securityContext:
+  enabled: "false"
+  fsGroup: 1001
+  runAsUser: 1001
+
+## Redis selectors and tolerations for pod assignment
+# nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
+# priorityClassName: {}
+# tolerations: []
+
+## Use an alternate scheduler, e.g. "stork".
+# schedulerName:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

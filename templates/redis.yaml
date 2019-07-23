@@ -69,6 +69,24 @@ spec:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '9121'
     spec:
+      {{- if eq .Values.securityContext.enabled "true" }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.master.priorityClassName }}"
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: "{{ .Values.schedulerName }}"
+      {{- end }}
       containers:
       - image: oliver006/redis_exporter:latest
         name: redis-exporter
@@ -122,13 +140,15 @@ spec:
         configMap:
           name: redis-cluster
           defaultMode: 0755
+
+      
   volumeClaimTemplates:
   - metadata:
       name: data
       labels:
         name: redis-cluster
     spec:
-      storageClassName: {{ .Values.storageClassName.name }} 
+      storageClassName: {{ .Values.storageClassName }} 
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
